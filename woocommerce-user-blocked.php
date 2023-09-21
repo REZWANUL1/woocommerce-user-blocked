@@ -22,3 +22,7 @@ function  usb_load_my_plugin_translation()
 load_plugin_textdomain('your-plugin-textdomain', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 }
 add_action('plugins_loaded', 'usb_load_my_plugin_translation');
+
+function test()  {
+   
+}
