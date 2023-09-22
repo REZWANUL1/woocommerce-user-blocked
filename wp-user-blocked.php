@@ -23,8 +23,12 @@ function  wub_load_my_plugin_translation()
 }
 add_action('plugins_loaded', 'wub_load_my_plugin_translation');
 
+//? adding user role
 add_action('init', 'wub_adding_role');
 function wub_adding_role()
 {
    add_role('wub_user_blocked', __('Blocked', 'wub'), ['blocked' => true]);
+   add_rewrite_rule('blocked/?$', 'index.php?blocked=1', 'top');
+
 }
+
