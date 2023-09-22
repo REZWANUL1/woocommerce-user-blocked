@@ -23,13 +23,14 @@ function  wub_load_my_plugin_translation()
 }
 add_action('plugins_loaded', 'wub_load_my_plugin_translation');
 
-//? adding user role
+// //? adding user role
 add_action('init', 'wub_adding_role');
 function wub_adding_role()
 {
-   add_role('wub_user_blocked', __('Blocked', 'wub'), ['blocked' => true]);
+   add_role('wub_user_blocked', __('Blocked', 'wub'), array('blocked' => true));
    add_rewrite_rule('blocked/?$', 'index.php?blocked=1', 'top');
 }
+
 
 //? process blocked permalink
 add_filter('query_vars', 'wub_process_query');
@@ -39,12 +40,43 @@ function wub_process_query()
    return $query_vars;
 }
 //? process query vars
-add_action('template_redirect', 'wub_blocked_redirect');
-function wub_blocked_redirect()
+add_action('template_redirect', 'wub_redirect_to_blocked');
+function wub_redirect_to_blocked()
 {
    $is_blocked = intval(get_query_var('blocked'));
-   if ($is_blocked) {
-      _e("You are blocked", 'wub');
+   if ($is_blocked || current_user_can('blocked')) {
+?>
+      <!DOCTYPE html>
+      <html lang="en">
+
+      <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title><?php _e('Blocked User', 'user-role-blocker'); ?></title>
+         <?php
+         wp_head();
+         ?>
+      </head>
+
+      <body>
+         <h2 style="text-align: center"><?php _e('You are blocked', 'user-role-blocker'); ?></h2>
+         <?php
+         wp_footer();
+         ?>
+      </body>
+
+      </html>
+<?php
       die();
    }
+};
+
+
+
+
+function remove_wub_user_blocked_role_when_deactivate()
+{
+   remove_role('wub_user_blocked');
 }
+
+register_deactivation_hook(__FILE__, 'remove_wub_user_blocked_role_when_deactivate');
