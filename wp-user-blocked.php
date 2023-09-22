@@ -11,18 +11,20 @@
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Update URI:        https://example.com/my-plugin/
- * Text Domain:       usb
+ * Text Domain:       wub
  * Domain Path:       /languages
  */
 if (!defined('ABSPATH')) {
-exit;
+   exit;
 }
-function  usb_load_my_plugin_translation()
+function  wub_load_my_plugin_translation()
 {
-load_plugin_textdomain('your-plugin-textdomain', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+   load_plugin_textdomain('your-plugin-textdomain', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 }
-add_action('plugins_loaded', 'usb_load_my_plugin_translation');
+add_action('plugins_loaded', 'wub_load_my_plugin_translation');
 
-function test()  {
-   
+add_action('init', 'wub_adding_role');
+function wub_adding_role()
+{
+   add_role('wub_user_blocked', __('Blocked', 'wub'), ['blocked' => true]);
 }
