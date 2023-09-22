@@ -29,6 +29,22 @@ function wub_adding_role()
 {
    add_role('wub_user_blocked', __('Blocked', 'wub'), ['blocked' => true]);
    add_rewrite_rule('blocked/?$', 'index.php?blocked=1', 'top');
-
 }
 
+//? process blocked permalink
+add_filter('query_vars', 'wub_process_query');
+function wub_process_query()
+{
+   $query_vars[] = 'blocked';
+   return $query_vars;
+}
+//? process query vars
+add_action('template_redirect', 'wub_blocked_redirect');
+function wub_blocked_redirect()
+{
+   $is_blocked = intval(get_query_var('blocked'));
+   if ($is_blocked) {
+      _e("You are blocked", 'wub');
+      die();
+   }
+}
